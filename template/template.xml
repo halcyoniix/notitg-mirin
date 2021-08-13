@@ -926,6 +926,7 @@
 		end
 	end
 
+	local update_command
 	local function screen_ready_command(self)
 		hide_theme_actors()
 		prepare_variables()
@@ -943,16 +944,20 @@
 		run_nodes()
 		run_mods()
 
-		self:luaeffect('Update')
+		local function skip_first_update()
+			self:SetDrawFunction(update_command)
+		end
+		self:SetDrawFunction(skip_first_update)
 	end
 
 	local oldtime = 0
-	local function update_command(self)
+	function update_command(self)
 		local beat = GAMESTATE:GetSongBeat()
 		local time = self:GetSecsIntoEffect()
 
 		-- don't run multiple times if the game hasn't 'ticked' yet
-		if time == oldtime then return end
+		-- actually, we need to run it every time now, because drawfunctinos
+		-- if time == oldtime then return end
 		oldtime = time
 
 		self:hidden(1)
@@ -1309,11 +1314,6 @@
 	self:addcommand('On', on_command)
 	self:addcommand('ScreenReady', screen_ready_command)
 
-	function skip_first_update()
-		self:removecommand('Update')
-		self:addcommand('Update', update_command)
-	end
-	self:addcommand('Update', skip_first_update)
 
 	-- NotITG and OpenITG have a long standing bug where the InitCommand on an actor can run twice in certain cases.
 	-- By removing the command after it's done, it can only ever run once
