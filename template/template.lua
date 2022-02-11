@@ -236,6 +236,9 @@ local function func(self)
 		end
 	end
 	self[2], self[3] = nil, self[2]
+	if self.delay == true then
+		self.delay = 1
+	end
 	local persist = self.persist
 	-- convert mode into a regular true or false
 	self.mode = self.mode == 'end' or self.m == 'e'
@@ -934,17 +937,40 @@ local active_funcs = perframe_data_structure(function(a, b)
 	local x, y = a.priority, b.priority
 	return x * x * y < x * y * y
 end)
+local delaylist = {}
 local function run_funcs(beat, time)
 	while funcs_index <= #funcs do
 		local e = funcs[funcs_index]
 		local measure = e.time and time or beat
 		if measure < e[1] then break end
 		if not e[2] then
-			e[3](measure)
+			if e.delay then
+				table.insert(delaylist, e)
+			else
+				e[3](measure)
+			end
 		elseif measure < e[1] + e[2] then
 			active_funcs:add(e)
 		end
 		funcs_index = funcs_index + 1
+	end
+
+	-- TODO test
+	local i = 1
+	while i <= #delaylist do
+		local e = delaylist[i]
+		if e.delay <= 0 then
+			e[3](e.time and time or beat)
+			-- delete the item from the delay list.
+			if i ~= #delaylist then
+				delaylist[i] = table.remove(delaylist)
+			else
+				table.remove(delaylist)
+			end
+		else
+			i = i + 1
+			e.delay = e.delay - 1
+		end
 	end
 
 	while true do

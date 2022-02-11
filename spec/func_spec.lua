@@ -43,7 +43,24 @@ describe('func', function()
     end)
 
     it('should support delay=', function()
-        pending()
+        local runs3 = false
+        local runs = false
+        xero.func{0, function()
+            runs3 = true
+        end, delay = 3}
+        xero.func{5, function()
+            runs = true
+        end, delay = true}
+
+        for i = 1, 3 do update() end
+        assert(not runs3, 'delay runs too early')
+        update()
+        assert(runs3, 'delay doesn\'t run')
+        assert(not runs, 'func ran thing at beat 5 too early')
+        update(5)
+        assert(not runs, 'delay=true didn\'t delay anything')
+        update()
+        assert(runs, 'delay=true delayed too long')
     end)
 
     it('should have proper persist semantics', function()
