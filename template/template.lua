@@ -898,13 +898,17 @@ local function run_eases(beat, time)
 			-- This is the reason why the sorting the eases table needs to be stable.
 			if not e.relative then
 				local mod = e[i + 1]
-				e[i] = e[i] - targets[plr][mod]
+				if type(e[i]) ~= 'table' then
+					e[i] = e[i] - targets[plr][mod]
+				end
 			end
 
 			-- Update the target if it needs to be updated
 			if ease_ends_at_different_position then
 				local mod = e[i + 1]
-				targets[plr][mod] = targets[plr][mod] + e[i]
+				if type(e[i]) ~= 'table' then
+					targets[plr][mod] = targets[plr][mod] + e[i]
+				end
 			end
 		end
 		-- activate the ease and move to the next one
@@ -925,7 +929,11 @@ local function run_eases(beat, time)
 			-- to the mods table.
 			for i = 4, #e, 2 do
 				local mod = e[i + 1]
-				mods[plr][mod] = mods[plr][mod] + e3 * e[i]
+				if type(e[i]) ~= 'table' then
+					mods[plr][mod] = mods[plr][mod] + e3 * e[i]
+				else
+					mods[plr][mod] = mods[plr][mod] + e3 * (e[i][2] - e[i][1])
+				end
 			end
 			active_eases_index = active_eases_index + 1
 		else
@@ -1230,7 +1238,7 @@ local function check_ease_errors(self, name)
 	end
 	local i = is_set and 2 or 4
 	while self[i] do
-		if type(self[i]) ~= 'number' then
+		if type(self[i]) ~= 'number' and type(self[i]) ~= 'table' then
 			return 'invalid mod percent'
 		end
 		if type(self[i + 1]) ~= 'string' then

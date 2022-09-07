@@ -1,6 +1,7 @@
 <Layer Type = "ActorFrame"><children>
 	
-
+	<Layer Type="Quad" Name="bg"/>
+	
 	<Layer Type="ActorProxy" Name="PC[1]" />
 	<Layer Type="ActorProxy" Name="PC[2]" />
 	<Layer Type="ActorProxy" Name="PJ[1]" />
@@ -9,7 +10,4 @@
 	<Layer Type="ActorProxy" Name="PP[1]" />
 	<Layer Type="ActorProxy" Name="PP[2]" />
 
-
-
 </children></Layer>
-`

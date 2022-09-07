@@ -28,3 +28,5 @@ function swap(t)
 	ease(t, 1, 'swap')
 	return swap
 end
+
+-- swap {beat, len, ease, 'ldur'}

@@ -54,21 +54,21 @@ definemod {'rotationx2', 'rotationy2', 'rotationz2', function(x, y, z, pn)
 aux {'blackspherealternate','blackspherecross','blacksphereflip'}
 
 node {'blackspherealternate', function(b)
-	local b = (-b * 2) / 100
+	local b = (-b * 2) / 360
 	local sin = 0.5*math.sin(((b)-0.5)*math.pi)+0.5
 	local cos = math.sin((b)*math.pi)
 	return sin * 100, 25/2 * cos, -25 * cos
 end, 'invert', 'reverse', 'alternate'}
 
 node {'blackspherecross', function(b)
-	local b = (-b * 2) / 100
+	local b = (-b * 2) / 360
 	local sin = 0.5*math.sin(((b)-0.5)*math.pi)+0.5
 	local cos = math.sin((b)*math.pi)
 	return sin * 100, 25/2 * cos, -25 * cos
 end, 'invert', 'reverse', 'cross'}
 
 node {'blacksphereflip', function(b)
-	local b = (-b * 2) / 100
+	local b = (-b * 2) / 360
 	local sin = 0.5*math.sin(((b)-0.5)*math.pi)+0.5
 	local cos = math.sin((b)*math.pi)
 	return 
@@ -77,3 +77,4 @@ node {'blacksphereflip', function(b)
 	-25 * cos,
 	37.5 * cos
 end, 'flip', 'split', 'alternate', 'reverse'}
+
